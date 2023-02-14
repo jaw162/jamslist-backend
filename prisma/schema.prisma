@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String @id @default(uuid())
+  username     String @unique
+  passwordHash String
+  posts        Post[]
+  conversation conversation[]
+  user Message[]
+  hideConvo UserHideConvo[]
+}
+
+model conversation {
+  id Int @unique @default(autoincrement()) @id
+  user User[]
+  messages Message[]
+  title String
+  hideConvo UserHideConvo[]
+}
+
+model UserHideConvo {
+  id Int @unique @default(autoincrement()) @id
+  user User @relation(fields: [userId], references: [id])
+  userId String
+  convo conversation @relation(fields: [convoId], references: [id], onDelete: Cascade)
+  convoId Int
+  hide Boolean @default(false)
+}
+
+model Message {
+  id Int @unique @default(autoincrement()) @id
+  user User @relation(fields: [authorId], references: [id])
+  authorId String
+  conversation conversation @relation(fields: [convoId], references: [id], onDelete: Cascade)
+  convoId Int
+  createdAt DateTime @default(now())
+  content String
+  read Boolean @default(false)
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  authorId  String
+  createdAt DateTime @default(now())
+  genre     Genre
+  countyId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  county    County   @relation(fields: [countyId], references: [name], onDelete: Cascade)
+}
+
+model County {
+  name         String @id @unique
+  abbreviation String
+  country      String 
+  slug String @unique
+  post         Post[]
+}
+
+enum Genre {
+  Rock
+  Blues
+  Jazz
+  Indie
+  Reggae
+  Pop
+  Electronic
+  None
+  Other
+}
