@@ -22,7 +22,7 @@ app.use(
     credentials: true,
   })
 );
-console.log("NODE_ENV:", process.env.NODE_ENV);
+
 app.use(requestLogger);
 app.use("/api/user", usersRouter);
 app.use("/api/login", loginRouter);
@@ -34,6 +34,7 @@ app.use("/api/conversation", convoRouter);
 
 app.listen(process.env.PORT || 3001, () => {
   console.log("app is running");
+  console.log("NODE_ENV:", process.env.NODE_ENV);
 });
 
 export default app;
