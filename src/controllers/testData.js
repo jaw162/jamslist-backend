@@ -1,15 +1,4 @@
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -52,8 +41,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var prisma_1 = __importDefault(require("../prisma"));
 var express_1 = require("express");
-var slugify_1 = __importDefault(require("slugify"));
-var ukCounties_1 = require("../ukCounties");
 var testDataRouter = (0, express_1.Router)();
 var faker_1 = require("@faker-js/faker");
 var crypto_1 = require("crypto");
@@ -102,50 +89,34 @@ function generateUsers() {
 function returnRandomNumber(number) {
     return Math.floor(Math.random() * number);
 }
-testDataRouter.get("/", function (request, response) { return __awaiter(void 0, void 0, void 0, function () {
-    var testUsers_1, countiesWithSlug, err_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
-            case 0:
-                _a.trys.push([0, 3, , 4]);
-                testUsers_1 = generateUsers();
-                return [4 /*yield*/, prisma_1.default.user.createMany({
-                        data: testUsers_1,
-                    })];
-            case 1:
-                _a.sent();
-                countiesWithSlug = ukCounties_1.ukCounties.map(function (el) { return (__assign(__assign({}, el), { slug: (0, slugify_1.default)(el.name) })); });
-                return [4 /*yield*/, prisma_1.default.county.createMany({
-                        data: countiesWithSlug,
-                    })];
-            case 2:
-                _a.sent();
-                countiesWithSlug.forEach(function (el) { return __awaiter(void 0, void 0, void 0, function () {
-                    var i, max;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
-                            case 0:
-                                i = 0;
-                                max = returnRandomNumber(30);
-                                _a.label = 1;
-                            case 1:
-                                if (!(i < max)) return [3 /*break*/, 3];
-                                return [4 /*yield*/, saveAndCreatePost(el, testUsers_1[returnRandomNumber(testUsers_1.length)])];
-                            case 2:
-                                _a.sent();
-                                i++;
-                                return [3 /*break*/, 1];
-                            case 3: return [2 /*return*/];
-                        }
-                    });
-                }); });
-                return [2 /*return*/, response.status(200).json({ message: "Test data generated" })];
-            case 3:
-                err_1 = _a.sent();
-                console.error(err_1);
-                return [2 /*return*/, response.status(400).json({ err: err_1, message: "Something went wrong" })];
-            case 4: return [2 /*return*/];
-        }
-    });
-}); });
+// testDataRouter.get("/", async (request, response) => {
+//   try {
+//     const testUsers = generateUsers();
+//     await prisma.user.createMany({
+//       data: testUsers,
+//     });
+//     const countiesWithSlug = ukCounties.map(el => ({
+//       ...el,
+//       slug: slugify(el.name),
+//     }));
+//     await prisma.county.createMany({
+//       data: countiesWithSlug,
+//     });
+//     countiesWithSlug.forEach(async el => {
+//       let i = 0;
+//       const max = returnRandomNumber(30);
+//       while (i < max) {
+//         await saveAndCreatePost(
+//           el,
+//           testUsers[returnRandomNumber(testUsers.length)]
+//         );
+//         i++;
+//       }
+//     });
+//     return response.status(200).json({ message: "Test data generated" });
+//   } catch (err) {
+//     console.error(err);
+//     return response.status(400).json({ err, message: "Something went wrong" });
+//   }
+// });
 exports.default = testDataRouter;

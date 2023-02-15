@@ -18,7 +18,9 @@ var app = (0, express_1.default)();
 app.use(getToken_1.getUser);
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
-    origin: process.env.NODE_ENV === "development" ? "http://localhost:3000" : "",
+    origin: process.env.NODE_ENV === "development"
+        ? "http://localhost:3000"
+        : "https://jamslist-frontend.vercel.app",
     credentials: true,
 }));
 app.use(requestLogger_1.requestLogger);
@@ -31,5 +33,6 @@ app.use("/api/testData", testData_1.default);
 app.use("/api/conversation", convo_1.default);
 app.listen(process.env.PORT || 3001, function () {
     console.log("app is running");
+    console.log("NODE_ENV:", process.env.NODE_ENV);
 });
 exports.default = app;
