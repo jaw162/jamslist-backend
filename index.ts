@@ -29,7 +29,7 @@ app.use("/api/posts", postsRouter);
 app.use("/api/testData", testDataRouter);
 app.use("/api/conversation", convoRouter);
 
-app.listen(3001, () => {
+app.listen(process.env.PORT || 3001, () => {
   console.log("app is running");
 });
 
