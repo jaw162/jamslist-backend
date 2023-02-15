@@ -1,6 +1,5 @@
 import prisma from "../prisma";
 import { Request, Router } from "express";
-import { randomUUID } from "crypto";
 import { ExpressRequestWithUser } from "../middlewares/getToken";
 const postsRouter = Router();
 
@@ -112,32 +111,23 @@ postsRouter.delete(
   }
 );
 
-postsRouter.put(
-  "/:id",
+postsRouter.post(
+  "/",
   async (request: Request & { user?: { id: string } }, response) => {
     try {
-      const { id } = request.params;
+      const { title, content, genre, countyId } = request.body;
 
       if (!request?.user?.id) {
         return response.status(404).json({ message: "Please Log In" });
       }
 
-      const post = await prisma.post.findUnique({
-        where: {
-          id,
-        },
-        select: {
-          authorId: true,
-        },
-      });
-
-      if (post?.authorId !== request?.user?.id) {
-        return response.status(404).json({ message: "Unauthorized" });
-      }
-
-      const posts = await prisma.post.delete({
-        where: {
-          id,
+      await prisma.post.create({
+        data: {
+          title,
+          content,
+          genre,
+          authorId: request.user.id,
+          countyId,
         },
       });
 
