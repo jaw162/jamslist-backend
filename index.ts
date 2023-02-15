@@ -18,10 +18,11 @@ app.use(
     origin:
       process.env.NODE_ENV === "development"
         ? "http://localhost:3000"
-        : /\.jamslist-frontend\.vercel\.app$/,
+        : "https://jamslist-frontend.vercel.app",
     credentials: true,
   })
 );
+console.log("NODE_ENV:", process.env.NODE_ENV);
 app.use(requestLogger);
 app.use("/api/user", usersRouter);
 app.use("/api/login", loginRouter);
