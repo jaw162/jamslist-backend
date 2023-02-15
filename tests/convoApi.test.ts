@@ -57,9 +57,5 @@ test("Checking convo POST endpoint", async () => {
     })
     .catch(err => console.error(err));
 
-  console.log("conversation object:", conversation);
-  console.log("conversation users:", conversation?.user);
-  console.log("conversation messages:", conversation?.messages);
-
   await prisma.conversation.delete({ where: { id: convoId } });
 });
