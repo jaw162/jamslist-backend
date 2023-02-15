@@ -48,40 +48,40 @@ function returnRandomNumber(number: number) {
   return Math.floor(Math.random() * number);
 }
 
-testDataRouter.get("/", async (request, response) => {
-  try {
-    const testUsers = generateUsers();
+// testDataRouter.get("/", async (request, response) => {
+//   try {
+//     const testUsers = generateUsers();
 
-    await prisma.user.createMany({
-      data: testUsers,
-    });
+//     await prisma.user.createMany({
+//       data: testUsers,
+//     });
 
-    const countiesWithSlug = ukCounties.map(el => ({
-      ...el,
-      slug: slugify(el.name),
-    }));
+//     const countiesWithSlug = ukCounties.map(el => ({
+//       ...el,
+//       slug: slugify(el.name),
+//     }));
 
-    await prisma.county.createMany({
-      data: countiesWithSlug,
-    });
+//     await prisma.county.createMany({
+//       data: countiesWithSlug,
+//     });
 
-    countiesWithSlug.forEach(async el => {
-      let i = 0;
-      const max = returnRandomNumber(30);
-      while (i < max) {
-        await saveAndCreatePost(
-          el,
-          testUsers[returnRandomNumber(testUsers.length)]
-        );
-        i++;
-      }
-    });
+//     countiesWithSlug.forEach(async el => {
+//       let i = 0;
+//       const max = returnRandomNumber(30);
+//       while (i < max) {
+//         await saveAndCreatePost(
+//           el,
+//           testUsers[returnRandomNumber(testUsers.length)]
+//         );
+//         i++;
+//       }
+//     });
 
-    return response.status(200).json({ message: "Test data generated" });
-  } catch (err) {
-    console.error(err);
-    return response.status(400).json({ err, message: "Something went wrong" });
-  }
-});
+//     return response.status(200).json({ message: "Test data generated" });
+//   } catch (err) {
+//     console.error(err);
+//     return response.status(400).json({ err, message: "Something went wrong" });
+//   }
+// });
 
 export default testDataRouter;
