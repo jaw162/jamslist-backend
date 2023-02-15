@@ -91,7 +91,8 @@ loginRouter.post("/", function (request, response) { return __awaiter(void 0, vo
                 });
                 response.setHeader("Set-Cookie", cookie_1.default.serialize("token", token, {
                     maxAge: 60 * 60,
-                    sameSite: "none",
+                    sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+                    secure: process.env.NODE_ENV === "production" ? true : false,
                 }));
                 response.status(200).send({ username: user.username, id: user.id });
                 return [3 /*break*/, 6];
