@@ -36,7 +36,7 @@ loginRouter.post("/", async (request, response) => {
       "Set-Cookie",
       cookie.serialize("token", token, {
         maxAge: 60 * 60,
-        sameSite: "lax",
+        sameSite: "none",
       })
     );
 
