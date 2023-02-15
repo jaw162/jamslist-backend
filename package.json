@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "dev": "cross-env NODE_ENV=development ts-node-dev index.ts"
+    "dev": "cross-env NODE_ENV=development ts-node-dev index.ts",
+    "start": "node src/index.js",
+    "build": "prisma generate"
   },
   "keywords": [],
   "author": "",
