@@ -81,6 +81,9 @@ usersRouter.get("/messages", function (request, response) { return __awaiter(voi
                     return [2 /*return*/, response.status(401).json({ message: "Unauthorized" })];
                 }
                 if (user.conversation.length) {
+                    user.conversation.forEach(function (convo) {
+                        convo.user = convo.user.filter(function (user) { var _a; return user.id !== ((_a = request === null || request === void 0 ? void 0 : request.user) === null || _a === void 0 ? void 0 : _a.id); });
+                    });
                     user.conversation = user === null || user === void 0 ? void 0 : user.conversation.filter(function (conv) { return conv.hideConvo[0].hide === false; });
                 }
                 return [2 /*return*/, response.status(200).json({ user: user })];
