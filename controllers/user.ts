@@ -39,13 +39,6 @@ usersRouter.get(
       }
 
       if (user.conversation.length) {
-        user.conversation.forEach(convo => {
-          const otherUser = convo.user.filter(
-            user => user.id !== request?.user?.id
-          );
-          convo.user = otherUser;
-        });
-
         user.conversation = user?.conversation.filter(
           conv => conv.hideConvo[0].hide === false
         );
